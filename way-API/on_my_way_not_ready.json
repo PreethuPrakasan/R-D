@@ -1,0 +1,36 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "firstName": "Mike",
+    "lastName": "Wilson",
+    "phone": "+11231231237"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "I'm on my way. Can you get my car ready for pickup?",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "BMW",
+      "model": "X5",
+      "year": "2020"
+    },
+    "repairOrder": {
+      "status": "in_progress",
+      "repairOrderNumber": "1176",
+      "shopNotes": "Brake pad replacement in progress. Parts just arrived.",
+      "services": [
+        {
+          "name": "Brake Service",
+          "status": "in_progress",
+          "description": "Front brake pad replacement"
+        }
+      ]
+    }
+  }
+}

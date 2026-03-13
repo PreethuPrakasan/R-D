@@ -1,0 +1,35 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+11231231234"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Hi, is my car ready for pickup? I'm waiting outside.",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T14:30:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Toyota",
+      "model": "Camry",
+      "year": "2020"
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1234",
+      "shopNotes": "Vehicle ready for pickup. All services completed.",
+      "services": [
+        {
+          "name": "Oil Change",
+          "status": "completed"
+        }
+      ]
+    }
+  }
+}

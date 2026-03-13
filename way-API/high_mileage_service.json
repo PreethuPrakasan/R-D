@@ -1,0 +1,86 @@
+{
+  "event": "service-calculation",
+  "customer": {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "phone": "+11231231235"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Can you remind me when my next service is due?",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Toyota",
+      "model": "Camry",
+      "year": "2018",
+      "mileage": 45000,
+      "mileageUnit": "m"
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1180",
+      "timeOut": "2025-01-15T14:00:00.000Z",
+      "mileageOut": 45000,
+      "services": [
+        {
+          "name": "Oil Change Service",
+          "status": "completed",
+          "description": "Synthetic oil change with filter",
+          "completedAt": "2025-01-15T13:00:00.000Z"
+        }
+      ]
+    },
+    "serviceHistory": [
+      {
+        "repairOrderNumber": "1179",
+        "date": "2024-10-15T00:00:00.000Z",
+        "mileage": 42000,
+        "services": [
+          {
+            "name": "Oil Change Service",
+            "description": "Synthetic oil change with filter"
+          }
+        ]
+      },
+      {
+        "repairOrderNumber": "1178",
+        "date": "2024-07-15T00:00:00.000Z",
+        "mileage": 39000,
+        "services": [
+          {
+            "name": "Oil Change Service",
+            "description": "Synthetic oil change with filter"
+          }
+        ]
+      },
+      {
+        "repairOrderNumber": "1177",
+        "date": "2024-04-15T00:00:00.000Z",
+        "mileage": 36000,
+        "services": [
+          {
+            "name": "Major Service",
+            "description": "36,000 mile service including oil change, air filter, cabin filter, spark plugs, and inspection"
+          }
+        ]
+      },
+      {
+        "repairOrderNumber": "1176",
+        "date": "2024-01-15T00:00:00.000Z",
+        "mileage": 33000,
+        "services": [
+          {
+            "name": "Oil Change Service",
+            "description": "Synthetic oil change with filter"
+          }
+        ]
+      }
+    ]
+  }
+}

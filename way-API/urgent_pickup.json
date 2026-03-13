@@ -1,0 +1,35 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "firstName": "Lisa",
+    "lastName": "Brown",
+    "phone": "+11231231238"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "I'm on my way. Can you get my car ready for pickup? I'm in a hurry!",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Mercedes",
+      "model": "C-Class",
+      "year": "2022"
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1177",
+      "shopNotes": "Vehicle ready. Customer is VIP - expedite pickup.",
+      "services": [
+        {
+          "name": "Oil Change",
+          "status": "completed"
+        }
+      ]
+    }
+  }
+}

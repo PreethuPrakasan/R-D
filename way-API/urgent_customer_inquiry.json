@@ -1,0 +1,64 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "id": "d290f1ee-6c54-4b01-90e6-d701748f0857",
+    "firstName": "John",
+    "lastName": "Doe",
+    "fullName": "John Doe",
+    "phone": "+11231231234",
+    "email": "john.doe@example.com"
+  },
+  "communications": {
+    "sms": [
+      {
+        "id": "d290f1ee-6c54-4b01-90e6-d701748f0858",
+        "body": "When will my car be ready? I need it for work tomorrow.",
+        "direction": "inbound",
+        "status": "delivered",
+        "createdAt": "2025-01-15T14:30:00.000Z",
+        "recipientPhone": "+11231231234",
+        "isRead": true
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Chevrolet",
+      "model": "Silverado",
+      "year": "2009",
+      "vin": "1GCEK29079E143361"
+    },
+    "repairOrder": {
+      "id": "0199bcad-b48a-71b7-aa53-c67793fde734",
+      "status": "in_progress",
+      "repairOrderNumber": "1174",
+      "timeIn": "2025-01-15T08:00:00.000Z",
+      "timeOut": "",
+      "customerNotes": "Customer needs vehicle urgently",
+      "shopNotes": "Engine diagnostic in progress. Found spark plug issues. Parts ordered.",
+      "total": 924,
+      "totalPaid": 0,
+      "totalDue": 924,
+      "services": [
+        {
+          "id": "0199bcaf-fde7-73fe-bab6-522189b4d49f",
+          "name": "Engine Diagnostic",
+          "status": "in_progress",
+          "description": "Engine misfire diagnosis and repair",
+          "completedAt": null,
+          "startedAt": "2025-01-15T09:00:00.000Z",
+          "lineItems": [
+            {
+              "id": "0199bcaf-fdea-7790-b25a-b5f0966a5a9d",
+              "name": "Spark Plugs",
+              "status": "pending",
+              "quantity": 4,
+              "netPrice": 25,
+              "description": "OEM spark plugs for V8 engine"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

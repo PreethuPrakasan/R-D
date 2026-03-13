@@ -1,0 +1,70 @@
+{
+  "event": "invoice-summary",
+  "customer": {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "phone": "+11231231235"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Please explain the invoice for the completed work",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "BMW",
+      "model": "X5",
+      "year": "2019",
+      "mileage": 45000
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1181",
+      "customerNotes": "Customer reported brake squealing and reduced stopping power",
+      "shopNotes": "Inspected brake system. Found worn brake pads and rotors. Replaced front brake pads and resurfaced rotors. Test drive confirmed smooth operation.",
+      "total": 650,
+      "totalPaid": 650,
+      "totalDue": 0,
+      "timeOut": "2025-01-15T16:00:00.000Z",
+      "services": [
+        {
+          "name": "Brake System Inspection",
+          "status": "completed",
+          "description": "Complete brake system inspection including pads, rotors, and calipers",
+          "concern": "Brake squealing and reduced stopping power",
+          "netPrice": 150,
+          "completedAt": "2025-01-15T10:00:00.000Z"
+        },
+        {
+          "name": "Front Brake Pad Replacement",
+          "status": "completed",
+          "description": "Replace front brake pads with OEM parts",
+          "concern": "Worn brake pads causing squealing",
+          "netPrice": 300,
+          "completedAt": "2025-01-15T12:00:00.000Z",
+          "lineItems": [
+            {
+              "name": "Front Brake Pads",
+              "description": "OEM brake pads for BMW X5 2019",
+              "quantity": 1,
+              "type": "part",
+              "netPrice": 180
+            }
+          ]
+        },
+        {
+          "name": "Brake Rotor Resurfacing",
+          "status": "completed",
+          "description": "Resurface front brake rotors to restore smooth surface",
+          "concern": "Brake rotor surface irregularities",
+          "netPrice": 200,
+          "completedAt": "2025-01-15T14:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

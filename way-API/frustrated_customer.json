@@ -1,0 +1,36 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "phone": "+11231231235"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "What's taking so long with my car? I've been waiting 3 hours!",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T14:30:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Honda",
+      "model": "Civic",
+      "year": "2019"
+    },
+    "repairOrder": {
+      "status": "in_progress",
+      "repairOrderNumber": "1235",
+      "shopNotes": "Complex transmission issue discovered. Waiting for parts delivery.",
+      "services": [
+        {
+          "name": "Transmission Repair",
+          "status": "pending",
+          "description": "Transmission fluid leak repair"
+        }
+      ]
+    }
+  }
+}

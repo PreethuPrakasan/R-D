@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Live Chat & Call - Sample</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --muted: #6b7280;
+        --text: #e5e7eb;
+        --accent: #22c55e;
+        --accent-2: #3b82f6;
+        --danger: #ef4444;
+        --chip: #1f2937;
+        --bubble-me: #2563eb;
+        --bubble-them: #374151;
+        --input: #0b1220;
+        --ring: #2563eb33;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        height: 100%;
+        margin: 0;
+        background: radial-gradient(1200px 1200px at 20% -10%, #1f2937 0%, #0b1020 35%, #05070f 70%, #04060d 100%), var(--bg);
+        color: var(--text);
+        font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .app {
+        height: 100%;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, #1f2937, #030712);
+      }
+
+      .btn {
+        appearance: none;
+        border: 1px solid #1f2937;
+        background: #0b1220;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 12px;
+        cursor: pointer;
+        transition: transform 0.06s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+      .btn:hover {
+        border-color: #334155;
+        box-shadow: 0 0 0 4px var(--ring);
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      .btn.primary {
+        background: linear-gradient(180deg, #1f2937, #0b1220);
+        border-color: #334155;
+      }
+      .btn.accent {
+        background: linear-gradient(180deg, #064e3b, #052e2b);
+        border-color: #10b981;
+      }
+      .btn.danger {
+        background: linear-gradient(180deg, #3f0a0a, #1a0909);
+        border-color: var(--danger);
+      }
+
+      .rooms {
+        padding: 12px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        border-bottom: 1px solid #1f2937;
+      }
+      .chip {
+        background: var(--chip);
+        color: var(--text);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid #1f2937;
+        cursor: pointer;
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 12px 16px;
+        border-top: 1px solid #1f2937;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      /* Main area */
+      .main {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        height: 100%;
+        min-width: 0;
+        background:
+          radial-gradient(600px 600px at 80% -20%, #1b2540 0%, transparent 60%),
+          radial-gradient(500px 600px at -10% 90%, #0d1b2a 0%, transparent 60%);
+      }
+      /* Top bar (mobile-like) */
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        background: #072a2f;
+        border-bottom: 1px solid #0b3a41;
+        position: sticky;
+        top: 0;
+        z-index: 30; /* keep above call-screen overlay */
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: url('https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=200&h=200&fit=crop&crop=faces') center/cover no-repeat;
+        border: 1px solid #0f3f45;
+      }
+      .title {
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      .topbar-right { display: flex; align-items: center; gap: 8px; }
+      .icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 999px; background: #0b1220; border: 1px solid #16313a; cursor: pointer; }
+      .menu { position: relative; }
+      .menu-panel {
+        position: absolute; top: 44px; right: 0; width: 220px;
+        background: #0b1220; border: 1px solid #1f2937; border-radius: 12px;
+        padding: 8px; display: none; box-shadow: 0 12px 40px rgba(0,0,0,0.45); z-index: 10;
+      }
+      .menu.open .menu-panel { display: block; }
+      .menu-title { font-size: 11px; color: var(--muted); padding: 6px 8px; }
+      .menu-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; }
+      .menu-item:hover { background: #0f172a; }
+
+      .videos { display: none; }
+      video {
+        width: 100%;
+        height: 160px;
+        background: #0b1220;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+
+      .messages {
+        min-height: 0;
+        overflow: auto;
+        padding: 12px 12px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: #0a0f1c;
+      }
+      .msg {
+        max-width: 78%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid #1f2937;
+        line-height: 1.35;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.35);
+      }
+      .msg.meta {
+        align-self: center;
+        max-width: 80%;
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .msg.them {
+        background: linear-gradient(180deg, #111827, #0b1220);
+        color: #e5e7eb;
+        align-self: flex-start;
+      }
+      .msg.me {
+        background: linear-gradient(180deg, var(--bubble-me), #1e40af);
+        color: #f8fafc;
+        align-self: flex-end;
+      }
+      .msg .ts {
+        display: block;
+        margin-top: 6px;
+        color: #cbd5e1aa;
+        font-size: 11px;
+      }
+
+      .composer {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 12px 12px 16px;
+        border-top: 1px solid #1f2937;
+        background: linear-gradient(180deg, rgba(8,12,22,0.6), rgba(5,8,16,0.6));
+        backdrop-filter: blur(8px);
+      }
+      .input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #0b1220;
+        border: 1px solid #1f2937;
+        border-radius: 999px;
+        padding: 6px 10px;
+      }
+      .input-wrap input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--text);
+        font-size: 14px;
+        padding: 8px;
+      }
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        border: 1px solid #1f2937;
+        background: #0b1220;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .send-btn { min-width: 72px; border-radius: 999px; }
+
+      /* Call screen */
+      .call-screen { display: none; position: fixed; inset: 0; background: radial-gradient(800px 400px at 50% 80%, #0e2a2f, transparent 70%), #071b1f; z-index: 20; }
+      .call-avatar { position: absolute; top: 18%; left: 50%; transform: translateX(-50%); width: 160px; height: 160px; border-radius: 999px; background: url('https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=400&h=400&fit=crop&crop=faces') center/cover no-repeat; border: 6px solid #0d343a; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+      .call-controls { position: absolute; left: 0; right: 0; bottom: 36px; display: flex; justify-content: center; gap: 16px; }
+      .pill { width: 54px; height: 54px; border-radius: 999px; display: grid; place-items: center; border: 1px solid #14343a; background: #0b1220; }
+      .pill.green { background: #063e33; border-color: #065f46; }
+      .pill.red { background: #5b1120; border-color: #7f1d1d; }
+
+      /* Floating rail */
+      .rail { position: fixed; top: 30%; left: 12px; display: flex; flex-direction: column; gap: 10px; z-index: 10; }
+      .rail .pill { width: 44px; height: 44px; }
+
+      /* Responsive */
+      @media (max-width: 960px) {
+        .videos { grid-template-columns: 1fr; }
+        video { height: 200px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="main">
+        <div class="topbar">
+          <div class="topbar-left">
+            <div class="icon" id="backBtn">◀</div>
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="title">Call with Finley.</div>
+          </div>
+          <div class="topbar-right">
+            <div class="icon">🔊</div>
+            <div class="menu" id="modeMenu">
+              <div class="icon" id="modeBtn">⋮</div>
+              <div class="menu-panel">
+                <div class="menu-title">MODE</div>
+                <div class="menu-item" data-mode="voice">Voice only <span id="chk-voice"> </span></div>
+                <div class="menu-item" data-mode="voice+transcript">Voice & transcript <span id="chk-voice-t"> </span></div>
+                <div class="menu-item" data-mode="chat">Chat only <span id="chk-chat">✓</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <section class="messages" id="messages">
+          <div class="msg meta">Welcome to the demo room. Messages will appear here.</div>
+          <div class="msg them">
+            Hi! This is a placeholder message—try sending one below.
+            <span class="ts">now</span>
+          </div>
+        </section>
+        <div class="composer">
+          <div class="input-wrap" style="flex:1;">
+            <button class="icon-btn" id="attachBtn" title="Attach" aria-label="Attach">📎</button>
+            <input id="messageInput" type="text" placeholder="Type a message and press Enter..." />
+            <button class="icon-btn" id="emojiBtn" title="Emoji" aria-label="Emoji">😊</button>
+          </div>
+          <button id="sendBtn" class="btn send-btn primary">Send</button>
+        </div>
+      </main>
+    </div>
+
+    <!-- Floating Action Rail (overlay) -->
+    <div class="rail" id="rail">
+      <div class="pill">🎙️</div>
+      <div class="pill">❌</div>
+      <div class="pill">↩️</div>
+      <div class="pill">😊</div>
+      <div class="pill">≡</div>
+    </div>
+
+    <!-- Call screen (overlay) -->
+    <section class="call-screen" id="callScreen">
+      <div class="call-avatar"></div>
+          <div class="call-controls">
+            <div class="pill" id="pauseBtn">⏸</div>
+            <div class="pill green" id="startCallBtn">🎙️</div>
+            <div class="pill red" id="endCallBtn">📞</div>
+      </div>
+    </section>
+
+    <script>
+      const qs = (sel) => document.querySelector(sel);
+      const qsa = (sel) => Array.from(document.querySelectorAll(sel));
+
+      // If the page is opened via file://, fetch() needs an absolute base URL
+      const API_BASE = (location.protocol === 'file:') ? 'http://localhost:5050' : '';
+
+      const state = {
+        inCall: false,
+        micMuted: false,
+        cameraOn: true
+      };
+
+      const messagesEl = qs('#messages');
+      const inputEl = qs('#messageInput');
+      const localVideo = qs('#localVideo');
+      const remoteVideo = qs('#remoteVideo');
+      const callScreen = qs('#callScreen');
+      let micStream = null;
+      let ttsAudio = null;
+      const rail = qs('#rail');
+      const modeMenu = qs('#modeMenu');
+      const chkVoice = qs('#chk-voice');
+      const chkVoiceT = qs('#chk-voice-t');
+      const chkChat = qs('#chk-chat');
+      let mediaRecorder = null;
+      let recorderActive = false;
+      let recorderTimer = null;
+      let recorderChunks = [];
+
+      function appendMessage(text, who = 'me') {
+        const div = document.createElement('div');
+        div.className = 'msg ' + (who === 'me' ? 'me' : (who === 'them' ? 'them' : 'meta'));
+        div.innerHTML = who === 'meta'
+          ? text
+          : `${text}<span class="ts">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</span>`;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function applyMode(nextMode) {
+        state.mode = nextMode;
+        // Menu checkmarks
+        chkVoice.textContent = nextMode === 'voice' ? '✓' : ' ';
+        chkVoiceT.textContent = nextMode === 'voice+transcript' ? '✓' : ' ';
+        chkChat.textContent = nextMode === 'chat' ? '✓' : ' ';
+        // Visibility
+        if (nextMode === 'voice') {
+          callScreen.style.display = 'block';
+          messagesEl.style.display = 'none';
+          qs('.composer').style.display = 'none';
+          rail.style.display = 'flex';
+          stopRecorder();
+        } else if (nextMode === 'voice+transcript') {
+          callScreen.style.display = 'none'; // transcript-only surface
+          messagesEl.style.display = 'flex';
+          qs('.composer').style.display = 'grid';
+          rail.style.display = 'flex';
+          appendMessage('Voice + transcript mode enabled.', 'meta');
+          startRecorder();
+        } else {
+          callScreen.style.display = 'none';
+          messagesEl.style.display = 'flex';
+          qs('.composer').style.display = 'grid';
+          rail.style.display = 'none';
+          stopRecorder();
+        }
+      }
+
+      // Chat interactions
+      function sendMessage() {
+        const text = inputEl.value.trim();
+        if (!text) return;
+        appendMessage(text, 'me');
+        inputEl.value = '';
+        getAssistantReply(text);
+      }
+
+      // Dummy media setup (no real signaling/WebRTC here)
+      async function startCall() {
+        if (state.inCall) return;
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+          micStream = stream;
+          localVideo.srcObject = stream;
+          // Note: remoteVideo would be set from a real RTCPeerConnection in production
+          state.inCall = true;
+          appendMessage('Call started', 'meta');
+          // If we are in transcript mode, start recorder
+          if (state.mode === 'voice+transcript') startRecorder();
+        } catch (err) {
+          console.error(err);
+          appendMessage('Failed to start call: ' + err.message, 'meta');
+        }
+      }
+
+      function endCall() {
+        if (!state.inCall) return;
+        const stream = micStream || localVideo.srcObject;
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        localVideo.srcObject = null;
+        remoteVideo.srcObject = null;
+        micStream = null;
+        stopTTS();
+        stopRecorder();
+        state.inCall = false;
+        appendMessage('Call ended', 'meta');
+      }
+
+      function toggleMute() {
+        state.micMuted = !state.micMuted;
+        const stream = micStream || localVideo.srcObject;
+        if (stream) {
+          stream.getAudioTracks().forEach(t => t.enabled = !state.micMuted);
+        }
+        const btn = document.getElementById('pauseBtn');
+        if (btn) btn.textContent = state.micMuted ? '▶️' : '⏸';
+      }
+
+      function toggleCamera() {
+        state.cameraOn = !state.cameraOn;
+        const stream = localVideo.srcObject;
+        if (stream) {
+          stream.getVideoTracks().forEach(t => t.enabled = state.cameraOn);
+        }
+        qs('#cameraBtn').textContent = state.cameraOn ? 'Camera Off' : 'Camera On';
+      }
+
+      // Wire up UI
+      qs('#sendBtn').addEventListener('click', sendMessage);
+      inputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+      qs('#startCallBtn').addEventListener('click', startCall);
+      qs('#endCallBtn').addEventListener('click', endCall);
+      // Pause/resume mic and TTS
+      qs('#pauseBtn').addEventListener('click', () => {
+        // Toggle mic
+        toggleMute();
+        // Toggle TTS playback
+        if (ttsAudio) {
+          if (!ttsAudio.paused) ttsAudio.pause();
+          else ttsAudio.play().catch(() => {});
+        }
+      });
+      qs('#attachBtn').addEventListener('click', () => appendMessage('Attachment dialog opened (placeholder)', 'meta'));
+      qs('#emojiBtn').addEventListener('click', () => appendMessage('Emoji picker opened (placeholder)', 'meta'));
+
+      // Mode menu
+      qs('#modeBtn').addEventListener('click', () => {
+        modeMenu.classList.toggle('open');
+      });
+      modeMenu.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          applyMode(item.dataset.mode);
+          modeMenu.classList.remove('open');
+        });
+      });
+
+      // Initial message
+      applyMode('chat');
+      appendMessage('Welcome. Start a call or send a message.', 'meta');
+
+      // --- Deepgram helpers (via server.py) ---
+      async function getAssistantReply(message) {
+        try {
+          const resp = await fetch(`${API_BASE}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message }),
+          });
+          if (!resp.ok) {
+            let msg = resp.statusText;
+            try { const e = await resp.json(); msg = e.error || msg; } catch {}
+            appendMessage('Chat error: ' + msg, 'meta');
+            return;
+          }
+          const data = await resp.json();
+          const reply = data.reply || '...';
+          appendMessage(reply, 'them');
+          if (state.mode !== 'chat') speakText(reply);
+        } catch (e) {
+          appendMessage('Chat fetch failed: ' + (e?.message || e), 'meta');
+        }
+      }
+
+      async function speakText(text) {
+        try {
+          const resp = await fetch(`${API_BASE}/api/tts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, model: 'aura-asteria-en', format: 'mp3' }),
+          });
+          if (!resp.ok) {
+            let msg = resp.statusText;
+            try { const e = await resp.json(); msg = e.error || msg; } catch {}
+            appendMessage('TTS error: ' + msg, 'meta');
+            return;
+          }
+          const arrayBuffer = await resp.arrayBuffer();
+          const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
+          const url = URL.createObjectURL(blob);
+          if (ttsAudio) { try { ttsAudio.pause(); } catch {} }
+          ttsAudio = new Audio(url);
+          ttsAudio.play().catch(() => {
+            appendMessage('Audio playback blocked by browser. Click anywhere and try again.', 'meta');
+          });
+        } catch (e) {
+          appendMessage('TTS fetch failed: ' + (e?.message || e), 'meta');
+        }
+      }
+
+      function stopTTS() {
+        if (ttsAudio) {
+          try { ttsAudio.pause(); } catch {}
+          try { ttsAudio.currentTime = 0; } catch {}
+        }
+      }
+
+      // --- Voice Recorder -> Deepgram STT -> Chat -> TTS ---
+      async function startRecorder() {
+        if (recorderActive) return;
+        try {
+          const stream = micStream || await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          if (!micStream) micStream = stream;
+          // Prefer opus-in-webm for compatibility
+          const preferredType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+            ? 'audio/webm;codecs=opus'
+            : (MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '');
+          mediaRecorder = new MediaRecorder(stream, preferredType ? { mimeType: preferredType } : undefined);
+          recorderChunks = [];
+          mediaRecorder.ondataavailable = (ev) => {
+            if (ev.data && ev.data.size > 0) recorderChunks.push(ev.data);
+          };
+          mediaRecorder.onstop = async () => {
+            try {
+              if (recorderChunks.length === 0) return;
+              const mime = mediaRecorder.mimeType || 'audio/webm';
+              const blob = new Blob(recorderChunks, { type: mime });
+              recorderChunks = [];
+              const fd = new FormData();
+              const ext = mime.includes('ogg') ? 'ogg' : 'webm';
+              fd.append('audio', blob, `chunk.${ext}`);
+              const resp = await fetch(`${API_BASE}/api/stt`, { method: 'POST', body: fd });
+              const data = await resp.json();
+              const text = (data && data.transcript || '').trim();
+              if (text) {
+                appendMessage(text, 'me');
+                getAssistantReply(text);
+              }
+            } catch (e) {
+              console.warn('STT failed', e);
+            } finally {
+              // loop if still active
+              if (recorderActive) {
+                // small delay to avoid gaps
+                setTimeout(() => {
+                  try { mediaRecorder.start(); } catch {}
+                  scheduleRecorderStop();
+                }, 50);
+              }
+            }
+          };
+          mediaRecorder.start();
+          recorderActive = true;
+          scheduleRecorderStop();
+        } catch (e) {
+          console.warn('Recorder start failed', e);
+        }
+      }
+
+      function scheduleRecorderStop() {
+        clearTimeout(recorderTimer);
+        // Create short complete files every 3 seconds so Deepgram gets full containers
+        recorderTimer = setTimeout(() => {
+          try { mediaRecorder.stop(); } catch {}
+        }, 3000);
+      }
+
+      function stopRecorder() {
+        if (!recorderActive) return;
+        clearTimeout(recorderTimer);
+        try { mediaRecorder.stop(); } catch {}
+        mediaRecorder = null;
+        recorderActive = false;
+        recorderChunks = [];
+      }
+    </script>
+  </body>
+</html>
+
+

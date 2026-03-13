@@ -1,0 +1,96 @@
+{
+  "event": "invoice-summary",
+  "customer": {
+    "firstName": "Mike",
+    "lastName": "Wilson",
+    "phone": "+11231231236"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Please explain the invoice for the completed work",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Mercedes",
+      "model": "C-Class",
+      "year": "2020",
+      "mileage": 35000
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1182",
+      "customerNotes": "Customer reported engine overheating and coolant leak",
+      "shopNotes": "Diagnosed coolant leak from water pump. Replaced water pump, thermostat, and coolant. Performed cooling system flush. Test drive confirmed normal operating temperature.",
+      "total": 850,
+      "totalPaid": 850,
+      "totalDue": 0,
+      "timeOut": "2025-01-15T17:00:00.000Z",
+      "services": [
+        {
+          "name": "Cooling System Diagnostic",
+          "status": "completed",
+          "description": "Complete cooling system inspection and pressure test",
+          "concern": "Engine overheating and coolant leak",
+          "netPrice": 200,
+          "completedAt": "2025-01-15T10:00:00.000Z"
+        },
+        {
+          "name": "Water Pump Replacement",
+          "status": "completed",
+          "description": "Replace water pump with OEM part",
+          "concern": "Coolant leak from water pump",
+          "netPrice": 400,
+          "completedAt": "2025-01-15T13:00:00.000Z",
+          "lineItems": [
+            {
+              "name": "Water Pump",
+              "description": "OEM water pump for Mercedes C-Class 2020",
+              "quantity": 1,
+              "type": "part",
+              "netPrice": 250
+            }
+          ]
+        },
+        {
+          "name": "Thermostat Replacement",
+          "status": "completed",
+          "description": "Replace thermostat with OEM part",
+          "concern": "Thermostat malfunction causing overheating",
+          "netPrice": 150,
+          "completedAt": "2025-01-15T14:00:00.000Z",
+          "lineItems": [
+            {
+              "name": "Thermostat",
+              "description": "OEM thermostat for Mercedes C-Class 2020",
+              "quantity": 1,
+              "type": "part",
+              "netPrice": 80
+            }
+          ]
+        },
+        {
+          "name": "Cooling System Flush",
+          "status": "completed",
+          "description": "Flush cooling system and refill with fresh coolant",
+          "concern": "Contaminated coolant from leak",
+          "netPrice": 100,
+          "completedAt": "2025-01-15T15:00:00.000Z",
+          "lineItems": [
+            {
+              "name": "Coolant",
+              "description": "OEM coolant for Mercedes C-Class 2020",
+              "quantity": 2,
+              "type": "part",
+              "netPrice": 60
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

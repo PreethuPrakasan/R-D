@@ -1,0 +1,71 @@
+{
+  "event": "service-notes",
+  "customer": {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "phone": "+11231231235"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Please generate service notes for the completed work",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T15:45:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Toyota",
+      "model": "Camry",
+      "year": "2020",
+      "mileage": 35000
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1180",
+      "customerNotes": "Customer reported check engine light and rough idle",
+      "shopNotes": "Diagnosed P0301 code - cylinder 1 misfire. Replaced spark plugs and ignition coil. Test drive confirmed smooth operation.",
+      "timeOut": "2025-01-15T14:00:00.000Z",
+      "services": [
+        {
+          "name": "Engine Diagnostic Service",
+          "status": "completed",
+          "description": "Diagnostic scan and engine performance analysis",
+          "concern": "Check engine light and rough idle",
+          "completedAt": "2025-01-15T11:00:00.000Z"
+        },
+        {
+          "name": "Spark Plug Replacement",
+          "status": "completed",
+          "description": "Replace all four spark plugs with OEM parts",
+          "concern": "Cylinder 1 misfire detected",
+          "completedAt": "2025-01-15T12:30:00.000Z",
+          "lineItems": [
+            {
+              "name": "Spark Plugs (Set of 4)",
+              "description": "OEM spark plugs for Toyota Camry 2020",
+              "quantity": 4,
+              "type": "part"
+            }
+          ]
+        },
+        {
+          "name": "Ignition Coil Replacement",
+          "status": "completed",
+          "description": "Replace ignition coil for cylinder 1",
+          "concern": "Cylinder 1 misfire confirmed",
+          "completedAt": "2025-01-15T13:30:00.000Z",
+          "lineItems": [
+            {
+              "name": "Ignition Coil",
+              "description": "OEM ignition coil for Toyota Camry 2020",
+              "quantity": 1,
+              "type": "part"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

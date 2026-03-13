@@ -1,0 +1,35 @@
+{
+  "event": "sms-received",
+  "customer": {
+    "firstName": "Mike",
+    "lastName": "Smith",
+    "phone": "+11231231236"
+  },
+  "communications": {
+    "sms": [
+      {
+        "body": "Can I pick up my car today?",
+        "direction": "inbound",
+        "createdAt": "2025-01-15T14:30:00.000Z"
+      }
+    ]
+  },
+  "currentRepairOrder": {
+    "vehicle": {
+      "make": "Ford",
+      "model": "F-150",
+      "year": "2021"
+    },
+    "repairOrder": {
+      "status": "completed",
+      "repairOrderNumber": "1236",
+      "shopNotes": "Brake service completed. Vehicle ready.",
+      "services": [
+        {
+          "name": "Brake Service",
+          "status": "completed"
+        }
+      ]
+    }
+  }
+}
